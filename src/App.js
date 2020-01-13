@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { connect } from "react-redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { onLogIn, onLogOut } from "./actions";
+
+class App extends React.Component {
+  loginButtonClickHandler = () => {
+    !this.props.user ? this.props.onLogIn() : this.props.onLogOut();
+  };
+
+  render() {
+    return (
+      <div>
+        <div>
+          {!this.props.user ? " " : "Logged as " + this.props.user.username}
+        </div>
+        <button onClick={this.loginButtonClickHandler}>
+          {!this.props.user ? "Log in" : "Log out"}
+        </button>
+      </div>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+
+export default connect(mapStateToProps, { onLogIn, onLogOut })(App);

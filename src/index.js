@@ -1,12 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import App from "./App";
+import { LOGGED_IN, LOGGED_OUT } from "./actions";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const INITIAL_STATE = { user: null };
+
+function reducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case LOGGED_IN:
+      return { ...state, user: action.user };
+    case LOGGED_OUT:
+      return { ...state, user: null };
+    default:
+      return state;
+  }
+}
+
+const store = createStore(reducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector("#root")
+);
